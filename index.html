@@ -1739,19 +1739,16 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
     setPreorders(updated);
     localStorage.setItem('vg-preorders', JSON.stringify(updated));
     // Send WhatsApp confirmation to customer
-    const portalUrl = window.location.origin + window.location.pathname + '?preorder=' + token;
     const msg = encodeURIComponent(
       '✅ *Reserva confirmada!*\n\n' +
       'Olá ' + form.name.split(' ')[0] + ', sua reserva foi registrada com sucesso.\n\n' +
       '📋 *Produto:* ' + peptide.name + '\n' +
       '🔢 *Quantidade:* ' + (parseInt(form.qty)||1) + ' unidade(s)\n' +
       '🔖 *Nº da reserva:* #' + (Date.now()+'').slice(-6) + '\n\n' +
-      'Você receberá um aviso assim que o produto estiver disponível.\n' +
-      'Acesse sua reserva a qualquer momento: ' + portalUrl
+      'Entraremos em contato via WhatsApp assim que o produto chegar. 🙌'
     );
     const wnum = form.whatsapp.replace(/\D/g,'');
-    const waLink = 'https://wa.me/55' + wnum + '?text=' + msg;
-    window.open(waLink, '_blank');
+    window.open('https://wa.me/55' + wnum + '?text=' + msg, '_blank');
   }
 
   function removePreorder(id) {
@@ -1776,17 +1773,15 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
   function notifyPreorder(po) {
     const now = Date.now();
     const expireAt = now + 24*60*60*1000;
-    const portalUrl = window.location.origin + window.location.pathname + '?preorder=' + po.token;
     const updated = preorders.map(p => p.id===po.id ? {...p, status:'notified', notifiedAt:now, reminderSent:false} : p);
     persistPreorders(updated);
     const firstName = po.name.split(' ')[0];
     const msg = encodeURIComponent(
       '🎉 *Produto disponível!*\n\n' +
-      'Olá ' + firstName + '! Seu produto reservado chegou.\n\n' +
+      'Olá ' + firstName + '! Seu produto reservado chegou ao estoque.\n\n' +
       '📦 *' + po.productName + '* (×' + po.qty + ')\n\n' +
-      '⏰ Você tem *24 horas* para concluir a compra.\n' +
-      'Acesse agora: ' + portalUrl + '\n\n' +
-      'Após esse prazo a reserva expira automaticamente.'
+      '⏰ Você tem *24 horas* para confirmar o pedido.\n' +
+      'Responda essa mensagem para finalizar sua compra! 🛒'
     );
     const wnum = po.whatsapp.replace(/\D/g,'');
     window.open('https://wa.me/55' + wnum + '?text=' + msg, '_blank');
@@ -1794,13 +1789,12 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
   }
 
   function sendReminder(po) {
-    const portalUrl = window.location.origin + window.location.pathname + '?preorder=' + po.token;
     const updated = preorders.map(p => p.id===po.id ? {...p, reminderSent:true} : p);
     persistPreorders(updated);
     const msg = encodeURIComponent(
       '⏰ *Lembrete — Sua reserva expira em 2 horas!*\n\n' +
-      'Olá ' + po.name.split(' ')[0] + ', não esqueça de concluir sua compra de *' + po.productName + '* (×' + po.qty + ').\n\n' +
-      '🔗 Acesse agora: ' + portalUrl
+      'Olá ' + po.name.split(' ')[0] + ', não esqueça de confirmar sua compra de *' + po.productName + '* (×' + po.qty + ').\n\n' +
+      'Responda essa mensagem para finalizar! 🛒'
     );
     const wnum = po.whatsapp.replace(/\D/g,'');
     window.open('https://wa.me/55' + wnum + '?text=' + msg, '_blank');
@@ -3402,8 +3396,8 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                   <div className="preorder-success-title">Reserva confirmada!</div>
                   <div className="preorder-success-sub">
                     Sua reserva de <strong>{preorderForm.qty}x {preorderModal.name}</strong> foi registrada!<br/>
-                    Uma mensagem de confirmação com o link da sua reserva foi enviada ao seu WhatsApp.<br/>
-                    <span style={{fontSize:"0.8rem",color:"var(--muted)"}}>Você receberá um aviso quando o produto chegar.</span>
+                    Uma confirmação foi enviada ao seu WhatsApp.<br/>
+                    <span style={{fontSize:"0.8rem",color:"var(--muted)"}}>Entraremos em contato quando o produto chegar.</span>
                   </div>
                   <button className="preorder-confirm-btn" style={{marginTop:20,width:'100%'}} onClick={()=>setPreorderModal(null)}>Fechar</button>
                 </div>
