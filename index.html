@@ -2664,6 +2664,197 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                 </div>
               </>;
             })()}
+
+            {/* TAB: PRÉ-ORDERS */}
+            {adminTab==="preorders" && (()=>{
+              const byProduct = {};
+              preorders.forEach(po => {
+                const p = products.find(x => x.id === po.productId);
+                const name = p ? p.name : po.productId;
+                if (!byProduct[name]) byProduct[name] = 0;
+                byProduct[name] += po.qty;
+              });
+              return <>
+                <div className="admin-actions">
+                  <button className="admin-action-btn danger" onClick={()=>{ if(window.confirm("Limpar todas as pré-orders?")){ setPreorders([]); localStorage.setItem('vg-preorders','[]'); showToast("Pré-orders limpas","info"); }}}>🗑️ Limpar tudo</button>
+                </div>
+                {Object.keys(byProduct).length > 0 && (
+                  <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:20}}>
+                    {Object.entries(byProduct).map(([name,qty])=>(
+                      <div key={name} style={{background:"rgba(255,165,0,0.1)",border:"1px solid rgba(255,165,0,0.3)",borderRadius:20,padding:"4px 12px",fontFamily:"'Space Mono',monospace",fontSize:"0.65rem",color:"#ffaa00"}}>
+                        {qty}x {name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {preorders.length === 0
+                  ? <div style={{textAlign:"center",color:"var(--muted)",padding:40,fontSize:"0.85rem"}}>Nenhuma reserva ainda</div>
+                  : preorders.map((po,i)=>{
+                    const p = products.find(x=>x.id===po.productId);
+                    return (
+                      <div key={po.id||i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",background:"rgba(255,165,0,0.04)",border:"1px solid rgba(255,165,0,0.18)",borderRadius:10,marginBottom:8}}>
+                        <div style={{flex:1}}>
+                          <div style={{fontWeight:600,marginBottom:2}}>{p?p.name:po.productId}</div>
+                          <div style={{fontFamily:"'Space Mono',monospace",fontSize:"0.65rem",color:"var(--muted)"}}>{po.name} · {po.whatsapp}</div>
+                        </div>
+                        <div style={{fontFamily:"'Space Mono',monospace",fontSize:"0.72rem",color:"#ffaa00"}}>×{po.qty}</div>
+                        <div style={{fontFamily:"'Space Mono',monospace",fontSize:"0.6rem",color:"var(--muted)",minWidth:90,textAlign:"right"}}>{po.date}</div>
+                        <button className="admin-remove-btn" onClick={()=>removePreorder(po.id)}>✕</button>
+                      </div>
+                    );
+                  })
+                }
+              </>;
+            })()}
+
+            {/* TAB: AVISOS */}
+            {adminTab==="avisos" && <>
+              <div className="notice-editor">
+                <div className="notice-editor-title">Novo Aviso</div>
+                <div className="notice-editor-row">
+                  <select className="notice-type-select" value={noticeInput.type} onChange={e=>setNoticeInput(n=>({...n,type:e.target.value}))}>
+                    <option value="warn">⚡ Atenção</option>
+                    <option value="info">ℹ️ Info</option>
+                    <option value="alert">🚨 Urgente</option>
+                  </select>
+                  <input className="notice-text-input" placeholder="Texto do aviso..." value={noticeInput.text} onChange={e=>setNoticeInput(n=>({...n,text:e.target.value}))} />
+                  <button className="notice-add-btn" onClick={()=>{
+                    if(!noticeInput.text.trim()) return;
+                    addNotice(noticeInput);
+                    setNoticeInput({type:'warn',text:''});
+                    showToast('Aviso publicado ✓');
+                  }}>Publicar</button>
+                </div>
+              </div>
+              {notices.length === 0
+                ? <div style={{textAlign:"center",color:"var(--muted)",padding:40,fontSize:"0.85rem"}}>Nenhum aviso publicado</div>
+                : <div className="notice-list-admin">
+                    {notices.map(n=>(
+                      <div key={n.id} className="notice-admin-item">
+                        <span>{n.type==='info'?'ℹ️':n.type==='warn'?'⚠️':n.type==='alert'?'🚨':'📌'}</span>
+                        <span style={{flex:1}}>{n.text}</span>
+                        <button className="notice-admin-remove" onClick={()=>removeNotice(n.id)}>✕ Remover</button>
+                      </div>
+                    ))}
+                  </div>
+              }
+            </>}
+
+            {/* TAB: FINANCEIRO */}
+            {adminTab==="financeiro" && (()=>{
+              const fmt = v => `R$ ${v.toLocaleString('pt-BR')}`;
+              const ordsByStatus = s => orders.filter(o=>(o.status||'pendente')===s);
+              const revByStatus = s => ordsByStatus(s).reduce((a,o)=>{ const p=products.find(x=>x.id===o.peptideId); return a+(p?p.price*o.qty:0); },0);
+              const confirmed = revByStatus('pago') + revByStatus('enviado') + revByStatus('entregue');
+              const pending   = revByStatus('pendente');
+              const totalOrds = orders.length;
+              const ticket    = totalOrds ? Math.round((confirmed+pending)/totalOrds) : 0;
+              const preorderProj = preorders.reduce((a,po)=>{ const p=products.find(x=>x.id===po.productId); return a+(p?p.price*po.qty:0); },0);
+
+              const prodRev = {}; const prodQty = {};
+              orders.forEach(o=>{ const p=products.find(x=>x.id===o.peptideId); if(!p) return; prodRev[p.name]=(prodRev[p.name]||0)+p.price*o.qty; prodQty[p.name]=(prodQty[p.name]||0)+o.qty; });
+              const rankList = Object.entries(prodRev).sort((a,b)=>b[1]-a[1]);
+              const maxRev = rankList[0]?rankList[0][1]:1;
+
+              const poByProd = {};
+              preorders.forEach(po=>{ const p=products.find(x=>x.id===po.productId); if(!p) return; if(!poByProd[p.name]) poByProd[p.name]={qty:0,proj:0}; poByProd[p.name].qty+=po.qty; poByProd[p.name].proj+=p.price*po.qty; });
+
+              const days7 = Array.from({length:7},(_,i)=>{ const d=new Date(); d.setDate(d.getDate()-(6-i)); return d; });
+              const trendData = days7.map(d=>{
+                const ds = d.toLocaleDateString('pt-BR');
+                const rev = orders.filter(o=>new Date(o.createdAt).toLocaleDateString('pt-BR')===ds)
+                  .reduce((a,o)=>{ const p=products.find(x=>x.id===o.peptideId); return a+(p?p.price*o.qty:0); },0);
+                return { label: d.toLocaleDateString('pt-BR',{weekday:'short'}), rev };
+              });
+              const maxTrend = Math.max(...trendData.map(d=>d.rev),1);
+
+              return (
+                <>
+                  <div className="fin-cards">
+                    <div className="fin-card green">
+                      <div className="fin-card-label">Faturamento Confirmado</div>
+                      <div className="fin-card-value">{fmt(confirmed)}</div>
+                      <div className="fin-card-sub">Pago + Enviado + Entregue</div>
+                    </div>
+                    <div className="fin-card yellow">
+                      <div className="fin-card-label">Em Aberto</div>
+                      <div className="fin-card-value">{fmt(pending)}</div>
+                      <div className="fin-card-sub">{ordsByStatus('pendente').length} pedido{ordsByStatus('pendente').length!==1?'s':''} pendente{ordsByStatus('pendente').length!==1?'s':''}</div>
+                    </div>
+                    <div className="fin-card purple">
+                      <div className="fin-card-label">Projeção Pré-Orders</div>
+                      <div className="fin-card-value">{fmt(preorderProj)}</div>
+                      <div className="fin-card-sub">{preorders.length} reserva{preorders.length!==1?'s':''} em fila</div>
+                    </div>
+                    <div className="fin-card blue">
+                      <div className="fin-card-label">Ticket Médio</div>
+                      <div className="fin-card-value">{fmt(ticket)}</div>
+                      <div className="fin-card-sub">{totalOrds} pedido{totalOrds!==1?'s':''} no total</div>
+                    </div>
+                  </div>
+
+                  <div className="fin-section">
+                    <div className="fin-section-title">Por Status</div>
+                    <div className="fin-status-grid">
+                      {[{status:'pendente',emoji:'🟡',label:'Pendente'},{status:'pago',emoji:'✅',label:'Pago'},{status:'enviado',emoji:'📦',label:'Enviado'},{status:'entregue',emoji:'🎉',label:'Entregue'}].map(({status,emoji,label})=>(
+                        <div className="fin-status-card" key={status}>
+                          <div className="fin-status-emoji">{emoji}</div>
+                          <div className="fin-status-label">{label}</div>
+                          <div className="fin-status-count">{ordsByStatus(status).length}</div>
+                          <div className="fin-status-revenue">{fmt(revByStatus(status))}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="fin-section">
+                    <div className="fin-section-title">Ranking de Produtos</div>
+                    {rankList.length === 0
+                      ? <div style={{color:"var(--muted)",fontSize:"0.85rem"}}>Nenhum pedido ainda</div>
+                      : rankList.map(([name,rev],i)=>(
+                        <div className="fin-rank-row" key={name}>
+                          <div className="fin-rank-pos">#{i+1}</div>
+                          <div className="fin-rank-name">{name}</div>
+                          <div className="fin-rank-bar-wrap"><div className="fin-rank-bar" style={{width:`${(rev/maxRev)*100}%`}} /></div>
+                          <div className="fin-rank-qty">×{prodQty[name]}</div>
+                          <div className="fin-rank-rev">{fmt(rev)}</div>
+                        </div>
+                      ))
+                    }
+                  </div>
+
+                  <div className="fin-section">
+                    <div className="fin-section-title">Projeção Pré-Orders por Produto</div>
+                    {Object.keys(poByProd).length === 0
+                      ? <div style={{color:"var(--muted)",fontSize:"0.85rem"}}>Nenhuma reserva ainda</div>
+                      : Object.entries(poByProd).sort((a,b)=>b[1].proj-a[1].proj).map(([name,{qty,proj}])=>(
+                        <div className="fin-preorder-row" key={name}>
+                          <div className="fin-preorder-name">{name}</div>
+                          <div className="fin-preorder-qty">{qty} reserva{qty!==1?'s':''}</div>
+                          <div className="fin-preorder-proj">{fmt(proj)}</div>
+                        </div>
+                      ))
+                    }
+                  </div>
+
+                  <div className="fin-section">
+                    <div className="fin-section-title">Últimos 7 Dias</div>
+                    <div className="fin-trend-grid">
+                      {trendData.map((d,i)=>(
+                        <div className="fin-trend-day" key={i}>
+                          <div className="fin-trend-val">{d.rev>0?`R$${(d.rev/1000).toFixed(1)}k`:'-'}</div>
+                          <div className="fin-trend-bar-wrap">
+                            <div className="fin-trend-bar-fill" style={{height:`${(d.rev/maxTrend)*100}%`}} />
+                          </div>
+                          <div className="fin-trend-label">{d.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
+
           {/* CALCULADORA */}
           <div className={`view ${view==="calc"?"visible":""}`}>
             {prevView && <button className="detail-back" onClick={()=>{ setView(prevView); setPrevView(null); }}>← Voltar ao produto</button>}
