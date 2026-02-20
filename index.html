@@ -286,6 +286,56 @@ main { padding: 36px 44px; max-width: 980px; }
 .calc-placeholder-icon { font-size: 2.2rem; opacity: 0.25; margin-bottom: 10px; }
 .calc-placeholder-text { font-size: 0.85rem; }
 .calc-topical-notice { background: rgba(255,160,50,0.06); border: 1px solid rgba(255,160,50,0.2); border-radius: 10px; padding: 14px 16px; font-size: 0.82rem; color: #a8bfc9; line-height: 1.7; margin-top: 10px; }
+
+/* ESGOTADO */
+.product-card.esgotado { opacity: 0.45; }
+.esgotado-badge { position: absolute; top: 12px; right: 12px; background: rgba(255,60,60,0.15); border: 1px solid rgba(255,60,60,0.4); color: #ff5050; font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; padding: 3px 9px; border-radius: 6px; }
+.add-to-cart-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--border); color: var(--muted); }
+.vial-wrap { display: flex; justify-content: center; align-items: center; padding: 12px 0 6px; margin-bottom: 4px; }
+
+/* ADMIN TABS */
+.admin-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 11px; padding: 4px; }
+.admin-tab { flex: 1; text-align: center; padding: 9px 12px; border-radius: 8px; border: none; background: transparent; color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.68rem; cursor: pointer; transition: all 0.18s; letter-spacing: 0.5px; }
+.admin-tab.active { background: rgba(0,229,195,0.1); color: var(--accent); border: 1px solid rgba(0,229,195,0.25); }
+
+/* STOCK TABLE */
+.stock-table { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.stock-row { display: grid; grid-template-columns: 1fr auto auto auto; align-items: center; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); gap: 16px; }
+.stock-row:last-child { border-bottom: none; }
+.stock-name { font-weight: 600; font-size: 0.88rem; }
+.stock-sku { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+.stock-qty { font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: 700; min-width: 40px; text-align: center; }
+.stock-qty.zero { color: #ff5050; }
+.stock-qty.low { color: var(--warn); }
+.stock-qty.ok { color: var(--accent); }
+.stock-ctrl { display: flex; align-items: center; gap: 6px; }
+.stock-btn { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); color: var(--text); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.stock-btn:hover { border-color: rgba(0,229,195,0.4); color: var(--accent); }
+.stock-input { width: 60px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.85rem; padding: 6px 8px; outline: none; text-align: center; transition: border-color 0.2s; }
+.stock-input:focus { border-color: rgba(0,229,195,0.4); }
+
+/* PRODUCT FORM */
+.prod-form { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+.prod-form-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 20px; }
+.prod-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.prod-form-group { display: flex; flex-direction: column; gap: 5px; }
+.prod-form-group label { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+.prod-form-group input, .prod-form-group select, .prod-form-group textarea { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 9px; padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+.prod-form-group input:focus, .prod-form-group select:focus, .prod-form-group textarea:focus { border-color: rgba(0,229,195,0.4); }
+.prod-form-group select option { background: #0a1219; }
+.prod-form-group textarea { resize: vertical; min-height: 70px; }
+.prod-form-full { grid-column: 1 / -1; }
+.prod-list { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.prod-list-row { display: grid; grid-template-columns: auto 1fr auto auto auto; align-items: center; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); gap: 14px; }
+.prod-list-row:last-child { border-bottom: none; }
+.prod-list-sku { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--accent); background: rgba(0,229,195,0.07); border: 1px solid rgba(0,229,195,0.15); padding: 3px 8px; border-radius: 5px; white-space: nowrap; }
+.prod-list-name { font-weight: 600; font-size: 0.88rem; }
+.prod-list-cat { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+.prod-list-price { font-family: 'Space Mono', monospace; color: var(--accent2); font-size: 0.85rem; white-space: nowrap; }
+.prod-edit-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.prod-edit-btn:hover { border-color: rgba(0,229,195,0.35); color: var(--accent); }
+.prod-del-btn { background: none; border: 1px solid rgba(255,107,53,0.25); color: rgba(255,107,53,0.7); font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+.prod-del-btn:hover { background: rgba(255,107,53,0.08); color: var(--warn); border-color: var(--warn); }
 </style>
 </head>
 <body>
@@ -306,17 +356,27 @@ const CATEGORIES = [
   { id: "neuro",        name: "Neuro & Foco",         icon: "🧠", color: "rgba(99,102,241,0.2)" },
 ];
 
-const PEPTIDES = [
-  { id: "tirzepatida", name: "Tirzepatida 15mg",    desc: "Agonista dual GIP/GLP-1 para perda de peso avançada",             category: "emagrecedores", price: 299 },
-  { id: "retatrutida", name: "Retatrutida 15mg",    desc: "Agonista triplo GIP/GLP-1/Glucagon de nova geração",              category: "emagrecedores", price: 399 },
-  { id: "ghkcu",       name: "GHK-Cu 50mg",         desc: "Peptídeo cúprico para colágeno, pele e cabelo",                  category: "beleza",        price: 299 },
-  { id: "glow",        name: "GLOW Blend 70mg",     desc: "BPC-157 + TB-500 + GHK-Cu — stack completo recuperação e beleza", category: "beleza",        price: 699 },
-  { id: "snap8",       name: "SNAP-8 10mg",         desc: "Botox natural, reduz linhas de expressão",                       category: "beleza",        price: 290 },
-  { id: "tesamorelin", name: "Tesamorelin 5mg",     desc: "Queima de gordura visceral sem efeitos GLP-1",                   category: "corpo",         price: 299 },
-  { id: "epithalon",   name: "Epithalon 10mg",      desc: "Longevidade celular, telômeros, sono e energia",                 category: "longevidade",   price: 249 },
-  { id: "pt141",       name: "PT-141 10mg",         desc: "Modulador de libido masculino e feminino",                       category: "libido",        price: 280 },
-  { id: "selank",      name: "Selank 5mg",          desc: "Ansiolítico peptídico, foco e clareza mental",                   category: "neuro",         price: 199 },
+const DEFAULT_PEPTIDES = [
+  { id: "tirzepatida", sku: "TZ15",   name: "Tirzepatida 15mg",    desc: "Agonista dual GIP/GLP-1 para perda de peso avançada",             category: "emagrecedores", price: 299 },
+  { id: "retatrutida", sku: "RT15",   name: "Retatrutida 15mg",    desc: "Agonista triplo GIP/GLP-1/Glucagon de nova geração",              category: "emagrecedores", price: 399 },
+  { id: "ghkcu",       sku: "GHK50",  name: "GHK-Cu 50mg",         desc: "Peptídeo cúprico para colágeno, pele e cabelo",                  category: "beleza",        price: 299 },
+  { id: "glow",        sku: "GLOW70", name: "GLOW Blend 70mg",     desc: "BPC-157 + TB-500 + GHK-Cu — stack completo recuperação e beleza", category: "beleza",        price: 699 },
+  { id: "snap8",       sku: "SNAP10", name: "SNAP-8 10mg",         desc: "Botox natural, reduz linhas de expressão",                       category: "beleza",        price: 290 },
+  { id: "tesamorelin", sku: "TSM5",   name: "Tesamorelin 5mg",     desc: "Queima de gordura visceral sem efeitos GLP-1",                   category: "corpo",         price: 299 },
+  { id: "epithalon",   sku: "EPT10",  name: "Epithalon 10mg",      desc: "Longevidade celular, telômeros, sono e energia",                 category: "longevidade",   price: 249 },
+  { id: "pt141",       sku: "PT141",  name: "PT-141 10mg",         desc: "Modulador de libido masculino e feminino",                       category: "libido",        price: 280 },
+  { id: "selank",      sku: "SLK5",   name: "Selank 5mg",          desc: "Ansiolítico peptídico, foco e clareza mental",                   category: "neuro",         price: 199 },
 ];
+
+function loadProducts() {
+  try { const s = localStorage.getItem("vg-products"); return s ? JSON.parse(s) : DEFAULT_PEPTIDES; } catch { return DEFAULT_PEPTIDES; }
+}
+function saveProducts(p) { localStorage.setItem("vg-products", JSON.stringify(p)); }
+
+function loadStock() {
+  try { return JSON.parse(localStorage.getItem("vg-stock") || "{}"); } catch { return {}; }
+}
+function saveStock(s) { localStorage.setItem("vg-stock", JSON.stringify(s)); }
 
 // ── persistence ──────────────────────────────────────────────────────────────
 // orders: [{ id, peptideId, buyerName, qty, createdAt }]
@@ -383,7 +443,141 @@ function formatDose(val, unit) {
   return val + ' ' + unit;
 }
 
-function CalcView() {
+function VialSVG({ name, dose, sku, color }) {
+  // Parse product name: "Tirzepatida 15mg" -> ["TIRZEPATIDA", "15mg"]
+  const parts = name ? name.split(/(\d+\s*m[gcl]+)/i) : ["PRODUTO",""];
+  const title = (parts[0]||name).trim().toUpperCase().slice(0, 14);
+  const doseStr = dose || (parts[1]||"").trim();
+  const skuStr = sku || "";
+  const teal = "#00e5c3";
+  const labelBg = "#0a1219";
+  const glassDark = "#0d1c2a";
+  const glassLight = "#1a3040";
+  const capColor = "#1c2e3a";
+  const rubberColor = "#0f1d28";
+  const shimmer = "rgba(255,255,255,0.08)";
+
+  return (
+    <svg viewBox="0 0 110 220" width="88" height="176" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id={`gb_${sku}`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor={glassDark} />
+          <stop offset="18%" stopColor={glassLight} />
+          <stop offset="50%" stopColor="#22404f" />
+          <stop offset="82%" stopColor={glassLight} />
+          <stop offset="100%" stopColor={glassDark} />
+        </linearGradient>
+        <linearGradient id={`gcap_${sku}`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#0a1821" />
+          <stop offset="40%" stopColor="#1f3545" />
+          <stop offset="100%" stopColor="#0a1821" />
+        </linearGradient>
+        <linearGradient id={`grim_${sku}`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#0e2030" />
+          <stop offset="45%" stopColor={teal} stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#0e2030" />
+        </linearGradient>
+        <linearGradient id={`gbot_${sku}`} x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#1a3040" />
+          <stop offset="100%" stopColor="#0a1219" />
+        </linearGradient>
+        <clipPath id={`cvial_${sku}`}>
+          <rect x="18" y="36" width="74" height="170" rx="9" />
+        </clipPath>
+        <filter id={`glow_${sku}`}>
+          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      {/* === CAP AREA === */}
+      {/* Crimped aluminum rim */}
+      <rect x="24" y="8" width="62" height="8" rx="3" fill={`url(#gcap_${sku})`} />
+      <rect x="22" y="14" width="66" height="5" rx="2" fill={`url(#grim_${sku})`} />
+      {/* Rubber stopper */}
+      <rect x="26" y="19" width="58" height="18" rx="4" fill={rubberColor} />
+      <rect x="30" y="21" width="50" height="3" rx="1.5" fill="rgba(255,255,255,0.05)" />
+      {/* Top shimmer line */}
+      <rect x="22" y="16" width="66" height="1" rx="0.5" fill="rgba(0,229,195,0.5)" />
+
+      {/* === GLASS BODY === */}
+      <rect x="18" y="36" width="74" height="170" rx="9" fill={`url(#gb_${sku})`} />
+
+      {/* Left glass edge shine */}
+      <rect x="18" y="40" width="5" height="162" rx="2.5" fill="rgba(255,255,255,0.06)" clipPath={`url(#cvial_${sku})`} />
+      {/* Right glass edge shine */}
+      <rect x="87" y="40" width="5" height="162" rx="2.5" fill="rgba(255,255,255,0.04)" clipPath={`url(#cvial_${sku})`} />
+      {/* Center shimmer */}
+      <rect x="48" y="40" width="8" height="162" fill="rgba(255,255,255,0.025)" clipPath={`url(#cvial_${sku})`} />
+
+      {/* === LABEL === */}
+      <g clipPath={`url(#cvial_${sku})`}>
+        {/* Label background */}
+        <rect x="18" y="64" width="74" height="112" fill={labelBg} />
+        {/* Label top teal line */}
+        <rect x="18" y="64" width="74" height="1.5" fill={teal} opacity="0.7" />
+        {/* Label bottom dashed separator */}
+        <line x1="22" y1="148" x2="88" y2="148" stroke={teal} strokeWidth="0.6" strokeDasharray="3,2" opacity="0.4" />
+
+        {/* VANGUARD LABS LOGO AREA */}
+        {/* V diamond icon */}
+        <polygon points="27,74 33,69 39,74 33,79" fill="none" stroke={teal} strokeWidth="1.2" />
+        <line x1="33" y1="69" x2="33" y2="79" stroke={teal} strokeWidth="0.8" opacity="0.5" />
+        <line x1="27" y1="74" x2="39" y2="74" stroke={teal} strokeWidth="0.8" opacity="0.5" />
+
+        {/* VANGUARD LABS text */}
+        <text x="43" y="77" fontFamily="'Space Mono', monospace" fontSize="5.5" fill="#a8bfc9" letterSpacing="0.8"
+          fontWeight="600">VANGUARD LABS</text>
+
+        {/* Divider */}
+        <line x1="22" y1="83" x2="88" y2="83" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
+
+        {/* PRODUCT NAME - big */}
+        <text x="24" y="101" fontFamily="'Syne', sans-serif" fontSize={title.length > 10 ? "10" : "12"}
+          fill="white" fontWeight="800" letterSpacing="0.3">{title}</text>
+
+        {/* DOSE - teal */}
+        <text x="24" y="115" fontFamily="'Space Mono', monospace" fontSize="8.5"
+          fill={teal} fontWeight="700">{doseStr}</text>
+
+        {/* Divider */}
+        <line x1="22" y1="120" x2="88" y2="120" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
+
+        {/* 99% Purity */}
+        <text x="24" y="130" fontFamily="'DM Sans', sans-serif" fontSize="6" fill="#8099aa" letterSpacing="0.2">99% Purity</text>
+        {/* Research Use Only */}
+        <text x="24" y="139" fontFamily="'DM Sans', sans-serif" fontSize="6" fill="#8099aa" letterSpacing="0.2">Research Use Only</text>
+
+        {/* SKU */}
+        <text x="24" y="157" fontFamily="'Space Mono', monospace" fontSize="5.5" fill="#8099aa">SKU: {skuStr}</text>
+
+        {/* Bottom right teal decoration - circuit line */}
+        <line x1="65" y1="158" x2="72" y2="158" stroke={teal} strokeWidth="1.2" opacity="0.6" />
+        <rect x="74" y="155" width="12" height="4" rx="1" fill={teal} opacity="0.25" />
+        <rect x="74" y="156.5" width="12" height="1" rx="0.5" fill={teal} opacity="0.7" />
+
+        {/* Label bottom teal line */}
+        <rect x="18" y="174.5" width="74" height="1.5" fill={teal} opacity="0.15" />
+      </g>
+
+      {/* === GLASS OVERLAYS (on top of label) === */}
+      {/* Left glass reflection strip */}
+      <rect x="19" y="36" width="3" height="168" rx="1.5" fill="rgba(255,255,255,0.07)" clipPath={`url(#cvial_${sku})`} />
+      {/* Top glass reflection */}
+      <rect x="18" y="36" width="74" height="8" rx="4" fill="rgba(255,255,255,0.04)" clipPath={`url(#cvial_${sku})`} />
+
+      {/* === BOTTOM === */}
+      <rect x="18" y="196" width="74" height="10" rx="0" fill={`url(#gbot_${sku})`} clipPath={`url(#cvial_${sku})`} />
+      <ellipse cx="55" cy="206" rx="37" ry="5" fill={glassDark} />
+      <ellipse cx="55" cy="206" rx="20" ry="2" fill="rgba(0,229,195,0.06)" />
+
+      {/* === SHADOW === */}
+      <ellipse cx="55" cy="213" rx="32" ry="5" fill="rgba(0,0,0,0.45)" />
+    </svg>
+  );
+}
+
+
   const { useState: us, useRef: ur } = React;
   const [search, setSearch] = us('');
   const [dropOpen, setDropOpen] = us(false);
@@ -636,14 +830,18 @@ function CalcView() {
 
 function App() {
   const [orders, setOrders] = useState(loadOrders);
+  const [products, setProducts] = useState(loadProducts);
+  const [stock, setStock] = useState(loadStock);
   const [view, setView]     = useState("catalog");
   const [activeCat, setActiveCat] = useState("all");
   const [myName, setMyName] = useState(() => localStorage.getItem("vg-nome") || "");
   const [toast, setToast]   = useState(null);
-  const [modal, setModal]   = useState(null); // { peptide }
+  const [modal, setModal]   = useState(null);
   const [formQty, setFormQty] = useState(1);
   const [formName, setFormName] = useState("");
   const [adminUnlocked, setAdminUnlocked] = useState(false);
+  const [adminTab, setAdminTab] = useState("pedidos");
+  const [prodForm, setProdForm] = useState(null); // null = fechado, {} = novo, {id} = editando
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [checkout, setCheckout] = useState(() => {
     try { return JSON.parse(localStorage.getItem('vg-checkout') || 'null') || { nomeCompleto:'', cpf:'', telefone:'', email:'', cep:'', estado:'', cidade:'', bairro:'', rua:'', numero:'', complemento:'', pagamento:'', observacoes:'' }; } catch { return { nomeCompleto:'', cpf:'', telefone:'', email:'', cep:'', estado:'', cidade:'', bairro:'', rua:'', numero:'', complemento:'', pagamento:'', observacoes:'' }; }
@@ -652,6 +850,8 @@ function App() {
   const [disclaimer, setDisclaimer] = useState(false);
 
   function persistOrders(o) { setOrders(o); saveOrders(o); }
+  function persistProducts(p) { setProducts(p); saveProducts(p); }
+  function persistStock(s) { setStock(s); saveStock(s); }
 
   // Freight calculation
   function calcFreight(estado, total) {
@@ -705,7 +905,7 @@ function App() {
     const freight = calcFreight(checkout.estado, myTotal);
     const totalFinal = myTotal + freight.value;
     const itens = myOrders.map(o => {
-      const p = PEPTIDES.find(x => x.id === o.peptideId);
+      const p = products.find(x => x.id === o.peptideId);
       return `• ${p.name} ×${o.qty} = R$ ${(p.price * o.qty).toLocaleString('pt-BR')}`;
     }).join('\n');
     const pagamentoLabel = checkout.pagamento === 'pix' ? 'PIX (à vista)' : checkout.pagamento === '2x' ? 'Cartão 2x (juros Mercado Pago)' : 'Cartão 3x (juros Mercado Pago)';
@@ -750,7 +950,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
 
   // Cart for current user
   const myOrders = useMemo(() => orders.filter(o => o.buyerName.toLowerCase() === myName.toLowerCase()), [orders, myName]);
-  const myTotal  = useMemo(() => myOrders.reduce((s, o) => s + o.qty * (PEPTIDES.find(p => p.id === o.peptideId)?.price || 0), 0), [myOrders]);
+  const myTotal  = useMemo(() => myOrders.reduce((s, o) => s + o.qty * (products.find(p => p.id === o.peptideId)?.price || 0), 0), [myOrders]);
   const cartCount = myOrders.reduce((s, o) => s + o.qty, 0);
 
   function openModal(peptide) {
@@ -808,7 +1008,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
   function copyWhatsApp() {
     const grouped = {};
     orders.forEach(o => {
-      const p = PEPTIDES.find(x => x.id === o.peptideId);
+      const p = products.find(x => x.id === o.peptideId);
       if (!p) return;
       if (!grouped[p.name]) grouped[p.name] = [];
       grouped[p.name].push(o);
@@ -824,14 +1024,14 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
   }
 
   // ── totals for admin ──
-  const totalRevenue = useMemo(() => orders.reduce((s, o) => s + o.qty * (PEPTIDES.find(p => p.id === o.peptideId)?.price || 0), 0), [orders]);
+  const totalRevenue = useMemo(() => orders.reduce((s, o) => s + o.qty * (products.find(p => p.id === o.peptideId)?.price || 0), 0), [orders, products]);
   const totalUnits   = useMemo(() => orders.reduce((s, o) => s + o.qty, 0), [orders]);
   const totalBuyers  = useMemo(() => new Set(orders.map(o => o.buyerName.toLowerCase())).size, [orders]);
 
   // ── cat groups ──
   const catGroups = CATEGORIES.filter(c => c.id !== "all").map(c => ({
     cat: c,
-    peptides: (activeCat === "all" ? PEPTIDES : PEPTIDES.filter(p => p.category === activeCat)).filter(p => p.category === c.id)
+    peptides: (activeCat === "all" ? products : products.filter(p => p.category === activeCat)).filter(p => p.category === c.id)
   })).filter(g => g.peptides.length);
 
   function peptideCartQty(peptideId) {
@@ -1049,7 +1249,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
 
           <div className="sidebar-section-title">Categorias</div>
           {CATEGORIES.map(c => {
-            const count = c.id === "all" ? PEPTIDES.length : PEPTIDES.filter(p => p.category === c.id).length;
+            const count = c.id === "all" ? products.length : products.filter(p => p.category === c.id).length;
             return (
               <button key={c.id} className={`cat-btn ${activeCat===c.id?"active":""}`}
                 onClick={()=>{ setActiveCat(c.id); setView("catalog"); }}>
@@ -1093,7 +1293,12 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                     const inCartQty = peptideCartQty(peptide.id);
                     const cartOrder = myOrders.find(o => o.peptideId === peptide.id);
                     return (
-                      <div key={peptide.id} className={`product-card ${inCartQty>0?"in-cart":""}`}>
+                      <div key={peptide.id} className={`product-card ${inCartQty>0?"in-cart":""} ${stock[peptide.id]===0?"esgotado":""}`} style={{position:'relative'}}>
+                        {stock[peptide.id]===0 && <div className="esgotado-badge">ESGOTADO</div>}
+                        <div className="vial-wrap">
+                          <VialSVG name={peptide.name} dose={peptide.name.match(/(\d+\s*m[gcl]+)/i)?.[1]||''} sku={peptide.sku||peptide.id.toUpperCase()} />
+                        </div>
+                        {peptide.sku && <div style={{fontFamily:"'Space Mono',monospace",fontSize:"0.6rem",color:"var(--muted)",marginBottom:6}}>{peptide.sku}</div>}
                         <div className="product-card-name">{peptide.name}</div>
                         <div className="product-card-desc">{peptide.desc}</div>
                         <div className="product-card-price">R$ {peptide.price.toLocaleString("pt-BR")} <span>/ampola</span></div>
@@ -1109,8 +1314,8 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                           </div>
                         )}
 
-                        <button className="add-to-cart-btn" onClick={()=>openModal(peptide)}>
-                          {inCartQty > 0 ? "+ ADICIONAR MAIS" : "ADICIONAR AO CARRINHO"}
+                        <button className="add-to-cart-btn" onClick={()=>openModal(peptide)} disabled={stock[peptide.id]===0}>
+                          {stock[peptide.id]===0 ? "PRODUTO ESGOTADO" : inCartQty > 0 ? "+ ADICIONAR MAIS" : "ADICIONAR AO CARRINHO"}
                         </button>
                       </div>
                     );
@@ -1147,7 +1352,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                 <div>
                   <div className="cart-items">
                     {myOrders.map(order => {
-                      const p = PEPTIDES.find(x => x.id === order.peptideId);
+                      const p = products.find(x => x.id === order.peptideId);
                       if (!p) return null;
                       const cat = CATEGORIES.find(c => c.id === p.category);
                       return (
@@ -1171,7 +1376,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
 
                   <div className="cart-summary">
                     {myOrders.map(order => {
-                      const p = PEPTIDES.find(x => x.id === order.peptideId);
+                      const p = products.find(x => x.id === order.peptideId);
                       if (!p) return null;
                       return (
                         <div key={order.id} className="cart-summary-row">
@@ -1202,55 +1407,202 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
           <div className={`view ${view==="admin"?"visible":""}`}>
             <div className="page-tag">▸ ADMINISTRADOR</div>
             <div className="page-title">Painel Admin</div>
-            <div className="page-sub">Visão geral de todos os pedidos recebidos.</div>
 
-            <div className="admin-grid">
+            <div className="admin-grid" style={{marginBottom:24}}>
               <div className="admin-stat"><div className="admin-stat-label">Compradores</div><div className="admin-stat-value">{totalBuyers}</div></div>
               <div className="admin-stat"><div className="admin-stat-label">Total unidades</div><div className="admin-stat-value">{totalUnits}</div></div>
               <div className="admin-stat"><div className="admin-stat-label">Receita bruta</div><div className="admin-stat-value">R$ {totalRevenue.toLocaleString("pt-BR")}</div></div>
-              <div className="admin-stat"><div className="admin-stat-label">Itens no sistema</div><div className="admin-stat-value">{orders.length}</div></div>
+              <div className="admin-stat"><div className="admin-stat-label">Produtos</div><div className="admin-stat-value">{products.length}</div></div>
             </div>
 
-            <div className="admin-actions">
-              <button className="admin-action-btn" onClick={copyWhatsApp}>📋 Copiar lista WhatsApp</button>
-              <button className="admin-action-btn danger" onClick={()=>{ if(window.confirm("Apagar TODOS os pedidos?")){ persistOrders([]); showToast("Pedidos apagados", "info"); }}}>🗑️ Limpar tudo</button>
+            {/* TABS */}
+            <div className="admin-tabs">
+              <button className={`admin-tab ${adminTab==="pedidos"?"active":""}`} onClick={()=>setAdminTab("pedidos")}>📋 PEDIDOS</button>
+              <button className={`admin-tab ${adminTab==="estoque"?"active":""}`} onClick={()=>setAdminTab("estoque")}>📦 ESTOQUE</button>
+              <button className={`admin-tab ${adminTab==="produtos"?"active":""}`} onClick={()=>setAdminTab("produtos")}>⚗️ PRODUTOS</button>
             </div>
 
-            {orders.length === 0 && (
-              <div style={{textAlign:"center",color:"var(--muted)",padding:40,fontSize:"0.85rem"}}>Nenhum pedido ainda</div>
-            )}
-
-            {orders.length > 0 && (
-              <div className="admin-table">
-                <div className="admin-table-header">
-                  <span>Produto</span>
-                  <span>Comprador</span>
-                  <span>Qtd</span>
-                  <span>Total</span>
-                  <span></span>
-                </div>
-                {orders.map(order => {
-                  const p = PEPTIDES.find(x => x.id === order.peptideId);
-                  if (!p) return null;
-                  return (
-                    <div key={order.id} className="admin-table-row">
-                      <div>
-                        <div className="admin-row-name">{p.name}</div>
-                        <div className="admin-row-buyer">R$ {p.price}/un</div>
+            {/* TAB: PEDIDOS */}
+            {adminTab==="pedidos" && <>
+              <div className="admin-actions">
+                <button className="admin-action-btn" onClick={copyWhatsApp}>📋 Copiar lista WhatsApp</button>
+                <button className="admin-action-btn danger" onClick={()=>{ if(window.confirm("Apagar TODOS os pedidos?")){ persistOrders([]); showToast("Pedidos apagados", "info"); }}}>🗑️ Limpar tudo</button>
+              </div>
+              {orders.length === 0 && (
+                <div style={{textAlign:"center",color:"var(--muted)",padding:40,fontSize:"0.85rem"}}>Nenhum pedido ainda</div>
+              )}
+              {orders.length > 0 && (
+                <div className="admin-table">
+                  <div className="admin-table-header">
+                    <span>Produto</span>
+                    <span>Comprador</span>
+                    <span>Qtd</span>
+                    <span>Total</span>
+                    <span></span>
+                  </div>
+                  {orders.map(order => {
+                    const p = products.find(x => x.id === order.peptideId);
+                    if (!p) return null;
+                    return (
+                      <div key={order.id} className="admin-table-row">
+                        <div>
+                          <div className="admin-row-name">{p.name}</div>
+                          <div className="admin-row-buyer">R$ {p.price}/un</div>
+                        </div>
+                        <div style={{color:"#a8bfc9"}}>{order.buyerName}</div>
+                        <div className="admin-row-qty">×{order.qty}</div>
+                        <div className="admin-row-total">R$ {(p.price*order.qty).toLocaleString("pt-BR")}</div>
+                        <div><button className="admin-remove-btn" onClick={()=>adminRemove(order.id)}>remover</button></div>
                       </div>
-                      <div style={{color:"#a8bfc9"}}>{order.buyerName}</div>
-                      <div className="admin-row-qty">×{order.qty}</div>
-                      <div className="admin-row-total">R$ {(p.price*order.qty).toLocaleString("pt-BR")}</div>
-                      <div><button className="admin-remove-btn" onClick={()=>adminRemove(order.id)}>remover</button></div>
+                    );
+                  })}
+                  <div style={{padding:"14px 20px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:24,fontFamily:"'Space Mono',monospace",fontSize:"0.78rem"}}>
+                    <span style={{color:"var(--muted)"}}>TOTAL GERAL</span>
+                    <span style={{color:"var(--accent)",fontWeight:700}}>R$ {totalRevenue.toLocaleString("pt-BR")}</span>
+                  </div>
+                </div>
+              )}
+            </>}
+
+            {/* TAB: ESTOQUE */}
+            {adminTab==="estoque" && <>
+              <div className="stock-table">
+                {products.map(p => {
+                  const qty = stock[p.id] ?? null;
+                  const qtyClass = qty === null ? 'ok' : qty === 0 ? 'zero' : qty <= 3 ? 'low' : 'ok';
+                  return (
+                    <div key={p.id} className="stock-row">
+                      <div>
+                        <div className="stock-name">{p.name}</div>
+                        <div className="stock-sku">{p.sku || p.id.toUpperCase()}</div>
+                      </div>
+                      <div className={`stock-qty ${qtyClass}`}>
+                        {qty === null ? '∞' : qty}
+                      </div>
+                      <div className="stock-ctrl">
+                        <button className="stock-btn" onClick={()=>{
+                          const cur = stock[p.id] ?? 0;
+                          persistStock({...stock, [p.id]: Math.max(0, cur-1)});
+                        }}>−</button>
+                        <input type="number" className="stock-input" min="0"
+                          value={stock[p.id] ?? ''}
+                          placeholder="∞"
+                          onChange={e=>{
+                            const v = e.target.value;
+                            if (v === '') {
+                              const ns = {...stock}; delete ns[p.id]; persistStock(ns);
+                            } else {
+                              const n = parseInt(v); if(!isNaN(n) && n>=0) persistStock({...stock, [p.id]: n});
+                            }
+                          }}
+                        />
+                        <button className="stock-btn" onClick={()=>{
+                          const cur = stock[p.id] ?? 0;
+                          persistStock({...stock, [p.id]: cur+1});
+                        }}>+</button>
+                      </div>
+                      <div style={{fontSize:"0.7rem",color:"var(--muted)",fontFamily:"'Space Mono',monospace"}}>
+                        {stock[p.id]===0 ? <span style={{color:"#ff5050"}}>ESGOTADO</span> : stock[p.id]===undefined ? 'Sem controle' : stock[p.id]<=3 ? <span style={{color:"var(--warn)"}}>BAIXO</span> : 'OK'}
+                      </div>
                     </div>
                   );
                 })}
-                <div style={{padding:"14px 20px",borderTop:"1px solid var(--border)",display:"flex",justifyContent:"flex-end",gap:24,fontFamily:"'Space Mono',monospace",fontSize:"0.78rem"}}>
-                  <span style={{color:"var(--muted)"}}>TOTAL GERAL</span>
-                  <span style={{color:"var(--accent)",fontWeight:700}}>R$ {totalRevenue.toLocaleString("pt-BR")}</span>
-                </div>
               </div>
-            )}
+              <div style={{marginTop:12,fontSize:"0.75rem",color:"var(--muted)",textAlign:"center"}}>
+                Campo vazio = sem controle de estoque (produto sempre disponível) · 0 = ESGOTADO
+              </div>
+            </>}
+
+            {/* TAB: PRODUTOS */}
+            {adminTab==="produtos" && (() => {
+              const emptyForm = { sku:'', name:'', desc:'', category:'emagrecedores', price:'' };
+              const editing = prodForm && prodForm.id ? products.find(p=>p.id===prodForm.id) : null;
+              const form = prodForm || {};
+
+              function saveProd() {
+                if (!form.name?.trim() || !form.price) { showToast("Nome e preço são obrigatórios", "error"); return; }
+                const price = parseFloat(form.price);
+                if (isNaN(price)) { showToast("Preço inválido", "error"); return; }
+                if (editing) {
+                  persistProducts(products.map(p => p.id===editing.id ? {...p, ...form, price} : p));
+                  showToast("Produto atualizado ✓");
+                } else {
+                  const id = (form.name||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,20) + Date.now();
+                  persistProducts([...products, { id, sku: form.sku||id.toUpperCase(), name: form.name, desc: form.desc||'', category: form.category||'emagrecedores', price }]);
+                  showToast("Produto criado ✓");
+                }
+                setProdForm(null);
+              }
+
+              return <>
+                {/* FORM */}
+                {prodForm !== null && (
+                  <div className="prod-form">
+                    <div className="prod-form-title">{editing ? '✏️ Editar Produto' : '＋ Novo Produto'}</div>
+                    <div className="prod-form-grid">
+                      <div className="prod-form-group">
+                        <label>SKU</label>
+                        <input placeholder="ex: RT15" value={form.sku||''} onChange={e=>setProdForm(f=>({...f,sku:e.target.value}))} />
+                      </div>
+                      <div className="prod-form-group">
+                        <label>Preço (R$) *</label>
+                        <input type="number" placeholder="299" value={form.price||''} onChange={e=>setProdForm(f=>({...f,price:e.target.value}))} />
+                      </div>
+                      <div className="prod-form-group prod-form-full">
+                        <label>Nome do produto *</label>
+                        <input placeholder="Retatrutida 15mg" value={form.name||''} onChange={e=>setProdForm(f=>({...f,name:e.target.value}))} />
+                      </div>
+                      <div className="prod-form-group prod-form-full">
+                        <label>Descrição</label>
+                        <textarea placeholder="Breve descrição do produto..." value={form.desc||''} onChange={e=>setProdForm(f=>({...f,desc:e.target.value}))} />
+                      </div>
+                      <div className="prod-form-group">
+                        <label>Categoria</label>
+                        <select value={form.category||'emagrecedores'} onChange={e=>setProdForm(f=>({...f,category:e.target.value}))}>
+                          {CATEGORIES.filter(c=>c.id!=="all").map(c=>(
+                            <option key={c.id} value={c.id}>{c.icon} {c.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div style={{display:"flex",gap:8,marginTop:16}}>
+                      <button className="admin-action-btn" onClick={saveProd}>💾 Salvar</button>
+                      <button className="admin-action-btn" style={{background:"transparent"}} onClick={()=>setProdForm(null)}>Cancelar</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* LIST */}
+                <div style={{display:"flex",justifyContent:"flex-end",marginBottom:12}}>
+                  <button className="admin-action-btn" onClick={()=>setProdForm({sku:'',name:'',desc:'',category:'emagrecedores',price:''})}>＋ Novo Produto</button>
+                </div>
+                <div className="prod-list">
+                  {products.map(p=>(
+                    <div key={p.id} className="prod-list-row">
+                      <div className="prod-list-sku">{p.sku||'—'}</div>
+                      <div>
+                        <div className="prod-list-name">{p.name}</div>
+                        <div className="prod-list-cat">{CATEGORIES.find(c=>c.id===p.category)?.icon} {CATEGORIES.find(c=>c.id===p.category)?.name}</div>
+                      </div>
+                      <div className="prod-list-price">R$ {p.price.toLocaleString("pt-BR")}</div>
+                      <button className="prod-edit-btn" onClick={()=>setProdForm({...p, price: p.price.toString()})}>editar</button>
+                      <button className="prod-del-btn" onClick={()=>{
+                        if(window.confirm(`Remover "${p.name}"?`)){
+                          persistProducts(products.filter(x=>x.id!==p.id));
+                          showToast("Produto removido", "info");
+                        }
+                      }}>excluir</button>
+                    </div>
+                  ))}
+                </div>
+                <div style={{marginTop:10,textAlign:"right"}}>
+                  <button style={{background:"none",border:"none",color:"var(--muted)",fontSize:"0.72rem",cursor:"pointer",fontFamily:"'Space Mono',monospace"}}
+                    onClick={()=>{ if(window.confirm("Restaurar lista padrão de produtos?")){ persistProducts(DEFAULT_PEPTIDES); showToast("Produtos restaurados", "info"); }}}>
+                    ↺ Restaurar padrão
+                  </button>
+                </div>
+              </>;
+            })()}
           </div>
 
           {/* CALCULADORA */}
