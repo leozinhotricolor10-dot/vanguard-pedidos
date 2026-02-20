@@ -548,8 +548,8 @@ footer.site-footer { background: rgba(0,0,0,0.3); border-top: 1px solid var(--bo
 }
 
 /* PRE-ORDER */
-.preorder-btn { width: 100%; margin-top: 8px; padding: 9px 14px; background: rgba(255,165,0,0.08); border: 1px solid rgba(255,165,0,0.3); color: #ffaa00; font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 1px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-.preorder-btn:hover { background: rgba(255,165,0,0.15); border-color: rgba(255,165,0,0.5); }
+.preorder-btn { width: 100%; margin-top: 8px; padding: 11px 14px; background: linear-gradient(135deg, rgba(255,165,0,0.18), rgba(255,100,0,0.12)); border: 1px solid rgba(255,165,0,0.55); color: #ffcc00; font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 1.5px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 700; box-shadow: 0 0 12px rgba(255,165,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05); }
+.preorder-btn:hover { background: linear-gradient(135deg, rgba(255,165,0,0.3), rgba(255,100,0,0.2)); border-color: rgba(255,165,0,0.8); box-shadow: 0 0 20px rgba(255,165,0,0.25); color: #fff; transform: translateY(-1px); }
 .preorder-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .preorder-modal { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; width: 100%; max-width: 420px; }
 .preorder-modal-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
@@ -1524,6 +1524,28 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
     setDisclaimer(false);
     showToast("Pedido enviado! 🎉");
     setView("catalog");
+  }
+
+  function savePreorder(peptide, form) {
+    const entry = {
+      id: Date.now(),
+      productId: peptide.id,
+      productName: peptide.name,
+      name: form.name,
+      whatsapp: form.whatsapp,
+      qty: parseInt(form.qty)||1,
+      date: new Date().toLocaleDateString('pt-BR'),
+      ts: Date.now(),
+    };
+    const updated = [...preorders, entry];
+    setPreorders(updated);
+    localStorage.setItem('vg-preorders', JSON.stringify(updated));
+  }
+
+  function removePreorder(id) {
+    const updated = preorders.filter(p=>p.id!==id);
+    setPreorders(updated);
+    localStorage.setItem('vg-preorders', JSON.stringify(updated));
   }
 
   function showToast(msg, type = "success") {
