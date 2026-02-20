@@ -2415,10 +2415,17 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                 </div>
               )}
 
-              {/* LISTA DE AVISOS */}
+              {/* LISTA DE AVISOS DE REPOSIÇÃO */}
               {(() => {
                 const notifyList = JSON.parse(localStorage.getItem('vg-notify')||'[]');
                 if (!notifyList.length) return null;
+                function removeNotify(idx) {
+                  const updated = notifyList.filter((_,i2)=>i2!==idx);
+                  localStorage.setItem('vg-notify', JSON.stringify(updated));
+                  showToast('Aviso removido','info');
+                  setAdminTab('__tmp');
+                  setTimeout(()=>setAdminTab('pedidos'),0);
+                }
                 return (
                   <div style={{marginTop:24}}>
                     <div style={{fontFamily:"'Space Mono',monospace",fontSize:"0.6rem",color:"#ffaa1e",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:12,paddingLeft:4}}>
@@ -2430,7 +2437,10 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                           <div style={{color:"var(--text)",fontWeight:600,marginBottom:2}}>{n.product}</div>
                           <div style={{color:"var(--muted)",fontFamily:"'Space Mono',monospace",fontSize:"0.68rem"}}>{n.contact}</div>
                         </div>
-                        <div style={{color:"var(--muted)",fontFamily:"'Space Mono',monospace",fontSize:"0.6rem"}}>{n.date}</div>
+                        <div style={{display:"flex",alignItems:"center",gap:12}}>
+                          <div style={{color:"var(--muted)",fontFamily:"'Space Mono',monospace",fontSize:"0.6rem"}}>{n.date}</div>
+                          <button className="admin-remove-btn" onClick={()=>removeNotify(i)}>✕</button>
+                        </div>
                       </div>
                     ))}
                   </div>
