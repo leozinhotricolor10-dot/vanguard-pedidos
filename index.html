@@ -40,15 +40,14 @@ body::before {
 /* NAV */
 nav {
   position: fixed; top:0; left:0; right:0; z-index:100;
-  display: flex; align-items: center; justify-content: center;
-  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 60px;
   background: rgba(5,10,14,0.92); backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
 }
 .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.5px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
 .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; box-shadow: 0 0 12px var(--accent); }
 .logo-sub { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 2px; margin-left: 2px; }
-.nav-inner { width: 100%; max-width: 1400px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
 .nav-right { display: flex; align-items: center; gap: 10px; }
 .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.68rem; padding: 6px 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
 .nav-btn:hover { border-color: rgba(0,229,195,0.35); color: var(--accent); }
@@ -58,8 +57,7 @@ nav {
 .cart-badge { background: var(--accent); color: #050a0e; font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; font-family: 'Syne', sans-serif; animation: popIn 0.2s ease forwards; }
 
 /* LAYOUT */
-.app-wrapper { display: flex; justify-content: center; }
-.app { position: relative; z-index: 1; display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; padding-top: 60px; width: 100%; max-width: 1400px; }
+.app { position: relative; z-index: 1; display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; padding-top: 60px; max-width: 1400px; margin: 0 auto; }
 
 /* SIDEBAR */
 aside {
@@ -91,7 +89,7 @@ aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; 
 .copy-btn:hover { border-color: rgba(0,229,195,0.35); color: var(--accent); }
 
 /* MAIN */
-main { padding: 36px 44px; }
+main { padding: 36px 44px; max-width: 980px; }
 .view { display: none; animation: fadeUp 0.4s ease forwards; }
 .view.visible { display: block; }
 .page-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,229,195,0.08); border: 1px solid rgba(0,229,195,0.2); color: var(--accent); font-size: 0.68rem; font-family: 'Space Mono', monospace; padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 1px; }
@@ -1462,7 +1460,6 @@ function CalcView() {
           </div>
         )}
       </div>
-      </div>
     </div>
   );
 }
@@ -1932,7 +1929,6 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
 
       {/* NAV */}
       <nav>
-        <div className="nav-inner">
         <div className="logo" onClick={()=>setView("catalog")} style={{cursor:"pointer"}}>
           <div className="logo-dot"></div>
           VANGUARD
@@ -1950,10 +1946,8 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
             {adminUnlocked ? <>ADMIN ✓{orders.filter(o=>(o.status||'pendente')==='pendente').length > 0 && <span style={{marginLeft:5,background:'var(--accent)',color:'#050a0e',borderRadius:10,padding:'1px 6px',fontSize:'0.6rem',fontWeight:700}}>{orders.filter(o=>(o.status||'pendente')==='pendente').length}</span>}</> : "ADMIN"}
           </button>
         </div>
-        </div>
       </nav>
 
-      <div className="app-wrapper">
       <div className="app">
         {/* SIDEBAR */}
         <aside>
@@ -1983,7 +1977,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
           </>}
 
           <div style={{flex:1}}></div>
-          {adminUnlocked && <button className="copy-btn" onClick={copyWhatsApp}>📋 Copiar lista WhatsApp</button>}
+
         </aside>
 
         {/* MAIN */}
