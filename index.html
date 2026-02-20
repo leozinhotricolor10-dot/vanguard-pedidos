@@ -574,7 +574,7 @@ footer.site-footer { background: rgba(0,0,0,0.3); border-top: 1px solid var(--bo
 .preorder-demand-chip span { color: var(--muted); font-size: 0.65rem; font-family: 'Space Mono', monospace; }
 .preorder-notify-btn { font-family: 'Space Mono', monospace; font-size: 0.6rem; background: rgba(0,229,195,0.08); border: 1px solid rgba(0,229,195,0.2); color: var(--accent); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
 /* ESGOTADO */
-.product-card.esgotado { opacity: 0.45; }
+.product-card.esgotado { opacity: 1; border-color: rgba(255,165,0,0.25); }
 .esgotado-badge { position: absolute; top: 12px; right: 12px; background: rgba(255,60,60,0.15); border: 1px solid rgba(255,60,60,0.4); color: #ff5050; font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; padding: 3px 9px; border-radius: 6px; }
 .add-to-cart-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--border); color: var(--muted); }
 .vial-wrap { display: flex; justify-content: center; align-items: center; padding: 12px 0 6px; margin-bottom: 4px; }
@@ -2002,52 +2002,6 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
 
 
 
-          {/* PRE-ORDER MODAL */}
-          {preorderModal && (
-            <div className="preorder-modal-overlay" onClick={(e)=>{ if(e.target.className==='preorder-modal-overlay') setPreorderModal(null); }}>
-              <div className="preorder-modal">
-                {preorderDone ? (
-                  <div className="preorder-success">
-                    <div className="preorder-success-icon">✅</div>
-                    <div className="preorder-success-title">Reserva confirmada!</div>
-                    <div className="preorder-success-sub">
-                      Sua reserva de <strong>{preorderForm.qty}x {preorderModal.name}</strong> foi registrada.<br/>
-                      Entraremos em contato via WhatsApp assim que o produto chegar.
-                    </div>
-                    <button className="preorder-confirm-btn" style={{marginTop:20,width:'100%'}} onClick={()=>setPreorderModal(null)}>Fechar</button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="preorder-modal-title">Reservar Pedido</div>
-                    <div className="preorder-modal-sub">Produto temporariamente indisponível. Reserve agora e avisamos quando chegar.</div>
-                    <div className="preorder-modal-product">📋 {preorderModal.name}</div>
-                    <div className="preorder-field">
-                      <label>Seu nome</label>
-                      <input placeholder="Ex: João Silva" value={preorderForm.name} onChange={e=>setPreorderForm(f=>({...f,name:e.target.value}))} />
-                    </div>
-                    <div className="preorder-qty-row">
-                      <div className="preorder-field">
-                        <label>WhatsApp</label>
-                        <input placeholder="(11) 99999-9999" value={preorderForm.whatsapp} onChange={e=>setPreorderForm(f=>({...f,whatsapp:e.target.value}))} />
-                      </div>
-                      <div className="preorder-field">
-                        <label>Quantidade</label>
-                        <input type="number" min="1" max="20" value={preorderForm.qty} onChange={e=>setPreorderForm(f=>({...f,qty:e.target.value}))} />
-                      </div>
-                    </div>
-                    <div className="preorder-modal-btns">
-                      <button className="preorder-cancel-btn" onClick={()=>setPreorderModal(null)}>Cancelar</button>
-                      <button className="preorder-confirm-btn" onClick={()=>{
-                        if(!preorderForm.name.trim() || !preorderForm.whatsapp.trim()) { showToast('Preencha nome e WhatsApp', 'error'); return; }
-                        savePreorder(preorderModal, preorderForm);
-                        setPreorderDone(true);
-                      }}>Confirmar Reserva</button>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
           {/* FAQ */}
           <div className={`view ${view==="faq"?"visible":""}`}>
             <div className="page-tag">▸ FAQ</div>
@@ -2599,6 +2553,53 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
             <CalcView />
           </div>
         </main>
+
+        {/* PRE-ORDER MODAL — fora das views para sempre renderizar */}
+        {preorderModal && (
+          <div className="preorder-modal-overlay" onClick={(e)=>{ if(e.target.className==='preorder-modal-overlay') setPreorderModal(null); }}>
+            <div className="preorder-modal">
+              {preorderDone ? (
+                <div className="preorder-success">
+                  <div className="preorder-success-icon">✅</div>
+                  <div className="preorder-success-title">Reserva confirmada!</div>
+                  <div className="preorder-success-sub">
+                    Sua reserva de <strong>{preorderForm.qty}x {preorderModal.name}</strong> foi registrada.<br/>
+                    Entraremos em contato via WhatsApp assim que o produto chegar.
+                  </div>
+                  <button className="preorder-confirm-btn" style={{marginTop:20,width:'100%'}} onClick={()=>setPreorderModal(null)}>Fechar</button>
+                </div>
+              ) : (
+                <>
+                  <div className="preorder-modal-title">Reservar Pedido</div>
+                  <div className="preorder-modal-sub">Produto temporariamente indisponível. Reserve agora e avisamos quando chegar.</div>
+                  <div className="preorder-modal-product">📋 {preorderModal.name}</div>
+                  <div className="preorder-field">
+                    <label>Seu nome</label>
+                    <input placeholder="Ex: João Silva" value={preorderForm.name} onChange={e=>setPreorderForm(f=>({...f,name:e.target.value}))} />
+                  </div>
+                  <div className="preorder-qty-row">
+                    <div className="preorder-field">
+                      <label>WhatsApp</label>
+                      <input placeholder="(11) 99999-9999" value={preorderForm.whatsapp} onChange={e=>setPreorderForm(f=>({...f,whatsapp:e.target.value}))} />
+                    </div>
+                    <div className="preorder-field">
+                      <label>Quantidade</label>
+                      <input type="number" min="1" max="20" value={preorderForm.qty} onChange={e=>setPreorderForm(f=>({...f,qty:e.target.value}))} />
+                    </div>
+                  </div>
+                  <div className="preorder-modal-btns">
+                    <button className="preorder-cancel-btn" onClick={()=>setPreorderModal(null)}>Cancelar</button>
+                    <button className="preorder-confirm-btn" onClick={()=>{
+                      if(!preorderForm.name.trim() || !preorderForm.whatsapp.trim()) { showToast('Preencha nome e WhatsApp','error'); return; }
+                      savePreorder(preorderModal, preorderForm);
+                      setPreorderDone(true);
+                    }}>Confirmar Reserva</button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ADD TO CART MODAL */}
