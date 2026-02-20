@@ -40,14 +40,15 @@ body::before {
 /* NAV */
 nav {
   position: fixed; top:0; left:0; right:0; z-index:100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+  height: 60px;
   background: rgba(5,10,14,0.92); backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
 }
 .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.5px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
 .logo-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s ease-in-out infinite; box-shadow: 0 0 12px var(--accent); }
 .logo-sub { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted); letter-spacing: 2px; margin-left: 2px; }
+.nav-inner { width: 100%; max-width: 1400px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; }
 .nav-right { display: flex; align-items: center; gap: 10px; }
 .nav-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.68rem; padding: 6px 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
 .nav-btn:hover { border-color: rgba(0,229,195,0.35); color: var(--accent); }
@@ -57,7 +58,8 @@ nav {
 .cart-badge { background: var(--accent); color: #050a0e; font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 99px; font-family: 'Syne', sans-serif; animation: popIn 0.2s ease forwards; }
 
 /* LAYOUT */
-.app { position: relative; z-index: 1; display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; padding-top: 60px; }
+.app-wrapper { display: flex; justify-content: center; }
+.app { position: relative; z-index: 1; display: grid; grid-template-columns: 248px 1fr; min-height: 100vh; padding-top: 60px; width: 100%; max-width: 1400px; }
 
 /* SIDEBAR */
 aside {
@@ -89,7 +91,7 @@ aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; 
 .copy-btn:hover { border-color: rgba(0,229,195,0.35); color: var(--accent); }
 
 /* MAIN */
-main { padding: 36px 44px; max-width: 980px; }
+main { padding: 36px 44px; }
 .view { display: none; animation: fadeUp 0.4s ease forwards; }
 .view.visible { display: block; }
 .page-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,229,195,0.08); border: 1px solid rgba(0,229,195,0.2); color: var(--accent); font-size: 0.68rem; font-family: 'Space Mono', monospace; padding: 4px 12px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 1px; }
@@ -1460,6 +1462,7 @@ function CalcView() {
           </div>
         )}
       </div>
+      </div>
     </div>
   );
 }
@@ -1918,7 +1921,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                 </div>
               </div>
 
-              <button className="modal-confirm-btn" onClick={sendToWhatsApp}>
+              <button className="modal-confirm-btn" onClick={sendToWhatsApp} disabled={myOrders.length===0}>
                 ENVIAR PEDIDO VIA WHATSAPP →
               </button>
               <button className="modal-cancel-btn" onClick={()=>setCheckoutOpen(false)}>cancelar</button>
@@ -1929,6 +1932,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
 
       {/* NAV */}
       <nav>
+        <div className="nav-inner">
         <div className="logo" onClick={()=>setView("catalog")} style={{cursor:"pointer"}}>
           <div className="logo-dot"></div>
           VANGUARD
@@ -1943,11 +1947,13 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
             {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
           <button className="nav-btn" onClick={adminUnlocked ? ()=>setView("admin") : handleAdminUnlock}>
-            {adminUnlocked ? "ADMIN ✓" : "ADMIN"}
+            {adminUnlocked ? <>ADMIN ✓{orders.filter(o=>(o.status||'pendente')==='pendente').length > 0 && <span style={{marginLeft:5,background:'var(--accent)',color:'#050a0e',borderRadius:10,padding:'1px 6px',fontSize:'0.6rem',fontWeight:700}}>{orders.filter(o=>(o.status||'pendente')==='pendente').length}</span>}</> : "ADMIN"}
           </button>
+        </div>
         </div>
       </nav>
 
+      <div className="app-wrapper">
       <div className="app">
         {/* SIDEBAR */}
         <aside>
@@ -1977,7 +1983,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
           </>}
 
           <div style={{flex:1}}></div>
-          <button className="copy-btn" onClick={copyWhatsApp}>📋 Copiar lista WhatsApp</button>
+          {adminUnlocked && <button className="copy-btn" onClick={copyWhatsApp}>📋 Copiar lista WhatsApp</button>}
         </aside>
 
         {/* MAIN */}
@@ -2369,7 +2375,34 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
               {orders.length === 0 && (
                 <div style={{textAlign:"center",color:"var(--muted)",padding:40,fontSize:"0.85rem"}}>Nenhum pedido ainda</div>
               )}
-              {orders.length > 0 && (
+              {orders.length > 0 && (() => {
+                const [adminStatusFilter, setAdminStatusFilter] = React.useState('all');
+                const filteredOrders = adminStatusFilter === 'all' ? orders : orders.filter(o => (o.status||'pendente') === adminStatusFilter);
+                const statusCounts = {
+                  pendente: orders.filter(o=>(o.status||'pendente')==='pendente').length,
+                  pago: orders.filter(o=>o.status==='pago').length,
+                  enviado: orders.filter(o=>o.status==='enviado').length,
+                  entregue: orders.filter(o=>o.status==='entregue').length,
+                };
+                return (
+                <div>
+                  <div style={{display:'flex',gap:6,marginBottom:12,flexWrap:'wrap'}}>
+                    {[
+                      {id:'all',label:'Todos',count:orders.length},
+                      {id:'pendente',label:'🟡 Pendente',count:statusCounts.pendente},
+                      {id:'pago',label:'✅ Pago',count:statusCounts.pago},
+                      {id:'enviado',label:'📦 Enviado',count:statusCounts.enviado},
+                      {id:'entregue',label:'🎉 Entregue',count:statusCounts.entregue},
+                    ].map(f=>(
+                      <button key={f.id} onClick={()=>setAdminStatusFilter(f.id)}
+                        style={{padding:'5px 12px',borderRadius:20,border:'1px solid',cursor:'pointer',fontSize:'0.72rem',fontFamily:"'Space Mono',monospace",
+                          borderColor: adminStatusFilter===f.id ? 'var(--accent)' : 'var(--border)',
+                          background: adminStatusFilter===f.id ? 'rgba(0,229,195,0.1)' : 'transparent',
+                          color: adminStatusFilter===f.id ? 'var(--accent)' : 'var(--muted)'}}>
+                        {f.label} <span style={{opacity:0.7}}>({f.count})</span>
+                      </button>
+                    ))}
+                  </div>
                 <div className="admin-table">
                   <div className="admin-table-header">
                     <span>Produto</span>
@@ -2378,7 +2411,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                     <span>Total</span>
                     <span></span>
                   </div>
-                  {orders.map(order => {
+                  {filteredOrders.map(order => {
                     const p = products.find(x => x.id === order.peptideId);
                     if (!p) return null;
                     return (
@@ -2413,7 +2446,9 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                     <span style={{color:"var(--accent)",fontWeight:700}}>R$ {totalRevenue.toLocaleString("pt-BR")}</span>
                   </div>
                 </div>
-              )}
+                </div>
+                );
+              })()}
 
               {/* LISTA DE AVISOS DE REPOSIÇÃO */}
               {(() => {
@@ -2937,6 +2972,14 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
             <input className="modal-input" value={formName} onChange={e=>setFormName(e.target.value)} placeholder="Como deseja ser identificado" autoFocus />
 
             <label className="modal-label">Quantidade</label>
+            {(() => {
+              const alreadyInCart = peptideCartQty(modal.peptide.id);
+              return alreadyInCart > 0 ? (
+                <div style={{fontSize:'0.72rem',color:'var(--accent)',fontFamily:"'Space Mono',monospace",marginBottom:8,padding:'6px 10px',background:'rgba(0,229,195,0.06)',borderRadius:6,border:'1px solid rgba(0,229,195,0.15)'}}>
+                  ℹ️ Você já tem <strong>{alreadyInCart}</strong> no carrinho — isso será somado
+                </div>
+              ) : null;
+            })()}
             <div className="qty-row">
               <button className="qty-big-btn" onClick={()=>setFormQty(q=>Math.max(1,q-1))}>−</button>
               <div className="qty-big-num">{formQty}</div>
@@ -2974,7 +3017,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
           <a className="footer-link" href="#">Research Use Only</a>
           <a className="footer-link" href="https://wa.me/5511999999999" target="_blank">Contato</a>
         </div>
-        <div className="footer-copy">© {new Date().getFullYear()} Vanguard Peptides · vanguardpeptides.co.uk</div>
+        <div className="footer-copy">© {new Date().getFullYear()} Vanguard Peptides · vanguardpep.com</div>
       </footer>
     </div>
   );
