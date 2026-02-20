@@ -573,6 +573,38 @@ footer.site-footer { background: rgba(0,0,0,0.3); border-top: 1px solid var(--bo
 .preorder-demand-chip strong { color: #ffaa00; font-size: 1rem; display: block; }
 .preorder-demand-chip span { color: var(--muted); font-size: 0.65rem; font-family: 'Space Mono', monospace; }
 .preorder-notify-btn { font-family: 'Space Mono', monospace; font-size: 0.6rem; background: rgba(0,229,195,0.08); border: 1px solid rgba(0,229,195,0.2); color: var(--accent); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+
+/* NOTICE BOARD */
+.notice-board { margin-bottom: 28px; }
+.notice-item { display: flex; align-items: flex-start; gap: 14px; background: rgba(255,193,7,0.06); border: 1px solid rgba(255,193,7,0.25); border-radius: 14px; padding: 16px 18px; margin-bottom: 10px; position: relative; }
+.notice-item.info  { background: rgba(0,229,195,0.05); border-color: rgba(0,229,195,0.25); }
+.notice-item.warn  { background: rgba(255,165,0,0.06); border-color: rgba(255,165,0,0.3); }
+.notice-item.alert { background: rgba(255,60,60,0.06); border-color: rgba(255,60,60,0.3); }
+.notice-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+.notice-text { font-size: 0.88rem; color: #c8dce8; line-height: 1.6; flex: 1; }
+.notice-dismiss { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; padding: 0; flex-shrink: 0; opacity: 0.5; transition: opacity 0.2s; }
+.notice-dismiss:hover { opacity: 1; }
+/* ORDER ID */
+.order-id-badge { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: var(--accent); background: rgba(0,229,195,0.07); border: 1px solid rgba(0,229,195,0.15); padding: 2px 7px; border-radius: 5px; letter-spacing: 0.5px; margin-bottom: 3px; display: inline-block; }
+/* ADMIN NOTICE EDITOR */
+.notice-editor { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+.notice-editor-title { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+.notice-editor-row { display: grid; grid-template-columns: 90px 1fr 80px; gap: 10px; align-items: center; margin-bottom: 10px; }
+.notice-type-select { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--fg); font-family: 'Space Mono', monospace; font-size: 0.65rem; padding: 8px 10px; border-radius: 8px; outline: none; }
+.notice-text-input { background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--fg); font-size: 0.85rem; padding: 8px 12px; border-radius: 8px; outline: none; }
+.notice-text-input:focus { border-color: var(--accent); }
+.notice-add-btn { background: rgba(0,229,195,0.1); border: 1px solid rgba(0,229,195,0.25); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.6rem; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+.notice-add-btn:hover { background: rgba(0,229,195,0.2); }
+.notice-list-admin { display: flex; flex-direction: column; gap: 8px; }
+.notice-admin-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 0.82rem; }
+.notice-admin-item span { flex: 1; color: #c8dce8; }
+.notice-admin-remove { background: none; border: none; color: #ff5050; cursor: pointer; font-size: 0.8rem; }
+
+@keyframes blink-warn {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 6px rgba(255,193,7,0.8)); }
+  50%       { opacity: 0.3; filter: drop-shadow(0 0 2px rgba(255,193,7,0.2)); }
+}
+.notice-icon-blink { animation: blink-warn 1.2s ease-in-out infinite; display: inline-block; }
 /* ESGOTADO */
 .product-card.esgotado { opacity: 1; border-color: rgba(255,165,0,0.25); }
 .esgotado-badge { position: absolute; top: 12px; right: 12px; background: rgba(255,60,60,0.15); border: 1px solid rgba(255,60,60,0.4); color: #ff5050; font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700; letter-spacing: 1.5px; padding: 3px 9px; border-radius: 6px; }
@@ -1410,6 +1442,11 @@ function App() {
   const [notifyInputs, setNotifyInputs] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [prevView, setPrevView] = useState(null);
+  const [notices, setNotices] = useState(()=>JSON.parse(localStorage.getItem('vg-notices')||JSON.stringify([
+    { id:1, type:'warn', text:'Devido à alta demanda de alguns produtos, recomendamos que você faça a reserva do seu pedido para não correr o risco de ficar sem.' }
+  ])));
+  const [dismissedNotices, setDismissedNotices] = useState(()=>JSON.parse(localStorage.getItem('vg-dismissed-notices')||'[]'));
+  const [noticeInput, setNoticeInput] = useState({type:'warn',text:''});
   const [preorderModal, setPreorderModal] = useState(null); // {peptide}
   const [preorderForm, setPreorderForm] = useState({name:'',whatsapp:'',qty:1});
   const [preorderDone, setPreorderDone] = useState(false);
@@ -1526,6 +1563,21 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
     setView("catalog");
   }
 
+  function dismissNotice(id) {
+    const d = [...dismissedNotices, id];
+    setDismissedNotices(d);
+    localStorage.setItem('vg-dismissed-notices', JSON.stringify(d));
+  }
+  function addNotice(notice) {
+    const n = [...notices, { id: Date.now(), ...notice }];
+    setNotices(n);
+    localStorage.setItem('vg-notices', JSON.stringify(n));
+  }
+  function removeNotice(id) {
+    const n = notices.filter(x=>x.id!==id);
+    setNotices(n);
+    localStorage.setItem('vg-notices', JSON.stringify(n));
+  }
   function savePreorder(peptide, form) {
     const entry = {
       id: Date.now(),
@@ -1575,7 +1627,10 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
       newOrders = orders.map(o => o === existing ? { ...o, qty: o.qty + formQty } : o);
       showToast(`${modal.peptide.name} atualizado no carrinho ✓`);
     } else {
-      const newOrder = { id: Date.now(), peptideId: modal.peptide.id, buyerName: name, qty: formQty, createdAt: new Date().toISOString() };
+      const _now = new Date();
+      const _pad = n=>String(n).padStart(2,'0');
+      const _orderId = `${_now.getFullYear()}${_pad(_now.getMonth()+1)}${_pad(_now.getDate())}${_pad(_now.getHours())}${_pad(_now.getMinutes())}`;
+      const newOrder = { id: _orderId, peptideId: modal.peptide.id, buyerName: name, qty: formQty, createdAt: new Date().toISOString() };
       newOrders = [...orders, newOrder];
       showToast(`${modal.peptide.name} adicionado ao carrinho ✓`);
     }
@@ -1911,6 +1966,24 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
               </div>
             </div>
 
+
+            {/* NOTICE BOARD */}
+            {notices.filter(n=>!dismissedNotices.includes(n.id)).length > 0 && (
+              <div className="notice-board">
+                {notices.filter(n=>!dismissedNotices.includes(n.id)).map(n=>(
+                  <div key={n.id} className={`notice-item ${n.type}`}>
+                    <div className="notice-icon">
+                      {n.type==='warn' || n.type==='alert'
+                        ? <span className="notice-icon-blink">{n.type==='alert'?'🚨':'⚠️'}</span>
+                        : 'ℹ️'}
+                    </div>
+                    <div className="notice-text">{n.text}</div>
+                    <button className="notice-dismiss" onClick={()=>dismissNotice(n.id)}>✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* ARTICLES STRIP */}
             {articles.length > 0 && (
               <div className="articles-strip">
@@ -2239,6 +2312,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
               <button className={`admin-tab ${adminTab==="produtos"?"active":""}`} onClick={()=>setAdminTab("produtos")}>⚗️ PRODUTOS</button>
               <button className={`admin-tab ${adminTab==="artigos"?"active":""}`} onClick={()=>setAdminTab("artigos")}>📝 ARTIGOS</button>
               <button className={`admin-tab ${adminTab==="preorders"?"active":""}`} onClick={()=>setAdminTab("preorders")}>📋 PRÉ-ORDERS</button>
+              <button className={`admin-tab ${adminTab==="avisos"?"active":""}`} onClick={()=>setAdminTab("avisos")}>📢 AVISOS</button>
             </div>
 
             {/* TAB: PEDIDOS */}
@@ -2265,6 +2339,7 @@ Frete: ${freight.value === 0 ? 'GRÁTIS' : 'R$ 60,00'} (${freight.reason})
                     return (
                       <div key={order.id} className="admin-table-row">
                         <div>
+                          {order.id && <div className="order-id-badge">#{order.id}</div>}
                           <div className="admin-row-name">{p.name}</div>
                           <div className="admin-row-buyer">{order.buyerName}</div>
                         </div>
